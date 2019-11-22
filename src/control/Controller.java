@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 
 import util.PropertiesDiskStorage;
+import view.AlienView;
 import view.View;
 import model.Game;
 import model.GameInfoProvider;
@@ -31,6 +32,11 @@ public class Controller implements KeyListener, ActionListener, GameObserver {
      * The frame to hold the panel with the current view of the game.
      */
     private View view;
+
+    /**
+     * The frame to hold the panel with the current view of the current number of aliens.
+     */
+    private AlienView alienView;
 
     /**
      * Create a view object, and have the view display the initial welcome message.
@@ -66,6 +72,8 @@ public class Controller implements KeyListener, ActionListener, GameObserver {
             gameInfo = game;
             gameInfo.addObserver(this); // this is passed in as a GameObserver
             view.showNewGameView(gameInfo, this); // this is passed in as a KeyListener
+            alienView = new AlienView();
+            alienView.showAlienPanel(gameInfo, this);
             gameControl.start();
         } else if (actionCommand.equals("savescore")) {
             /* Obtain the id entered by the user. */
@@ -127,7 +135,7 @@ public class Controller implements KeyListener, ActionListener, GameObserver {
      * that final view for 2.5 seconds, and then either display the welcome view, or, if the score
      * is high enough to be saved, display the save score view.
      */
-    public void gameChanged() {
+    public void   gameChanged() {
         if (gameInfo.isOver()) {
             final Controller thisController = this;
             Timer t = new Timer(2500, new ActionListener() {
